@@ -7,11 +7,14 @@
 
 #ifndef SRC_CAMERA_H_
 #define SRC_CAMERA_H_
-#include "../gpio/GPIO.h"
+#include "Camera.h"
+#include "gpio/GPIO.h"
 #include "pthread.h"
 #include <iostream>
-#include<opencv2/opencv.hpp> // C++ OpenCV include file
-using namespace std;
+#include <mutex>
+#include <stdlib.h>
+#include <opencv2/opencv.hpp> // C++ OpenCV include file
+
 using namespace cv;
 
 class Camera {
@@ -25,7 +28,7 @@ public:
 	void takePicture(int pictureType, int number);
 private:
 	GPIO* cameraLight;
-	std::mutex cameraMutex;
+	mutex cameraMutex;
 	VideoCapture* capture;
 	int height;
 	int width;

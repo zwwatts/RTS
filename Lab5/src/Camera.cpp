@@ -6,27 +6,28 @@
  */
 
 #include "Camera.h"
-#include "../gpio/GPIO.h"
-#include "pthread.h"
+#include "gpio/GPIO.h"
 #include <iostream>
 #include <mutex>
+#include <thread>
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
 
-using namespace std;
+
 using namespace cv;
 using namespace Camera;
 
 Camera::Camera() {
 	// TODO Auto-generated constructor stub
-	Camera::light = new GPIO(68);
-	light->setDirection(GPIO::OUTPUT);
+	Camera::cameraLight = new GPIO(68);
+	Camera::cameraLight->setDirection(GPIO::OUTPUT);
 }
 
 Camera::~Camera() {
 	// TODO Auto-generated destructor stub
 }
 void run(){
-	while(isThreadRunning){
+	VideoCapture capture(0);
+	while(Camera::isThreadRunning){
 		Camera::cameraMutex.lock()
 		capture.grab();
 		Camera::cameraMutex.unlock();

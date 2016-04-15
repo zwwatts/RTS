@@ -4,6 +4,12 @@
  *  Created on: Apr 15, 2016
  *      Author: se3910
  */
+#include "Camera.h"
+#include "gpio/GPIO.h"
+#include "pthread.h"
+#include <iostream>
+#include <mutex>
+#include <opencv2/opencv.hpp> // C++ OpenCV include file
 
 Camera camera;
 int numCaptures;
