@@ -25,9 +25,9 @@ Camera::Camera(int port, int pin, int width, int height) {
 	Camera::capture = new VideoCapture(port);
 
 }
-Camera::Camera(Camera& c){
+/*Camera::Camera(Camera& c){
 
-};
+};*/
 Camera::~Camera() {
 	// TODO Auto-generated destructor stub
 }
@@ -80,6 +80,6 @@ void Camera::takePicture(int pictureType, int number){
 	 cameraMutex.unlock();
 }
 void Camera::start(){
-	std::thread cameraThread (Camera::run);
+	std::thread cameraThread (run);
 }
 

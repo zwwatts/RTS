@@ -12,13 +12,12 @@
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
 
 using namespace exploringBB;
-Camera camera;
 int numCaptures;
 
 int button1Pressed(int var);
 int button2Pressed(int var);
 
-int main(char*  argv[], int argc){
+int main(int argc, char*  argv[]){
 	if(argc < 6 || argc > 6){
 		std::cout << "selfie button1 button2 LED width height" << std::endl;
 		exit(0);

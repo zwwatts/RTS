@@ -21,7 +21,7 @@ using namespace exploringBB;
 
 class Camera {
 public:
-	Camera(Camera& c);
+	//Camera(Camera& c);
 	Camera(int port, int pinNumber, int width, int height);
 	virtual ~Camera();
 	void run();
