@@ -21,7 +21,7 @@ Camera::Camera(int port, int pin, int width, int height) {
 	// TODO Auto-generated constructor stub
 	Camera::cameraLight = new GPIO(pin);
 	Camera::cameraLight->setDirection(GPIO::OUTPUT);
-	Camera::capture(port);
+	Camera::capture = VideoCapture(port);
 
 }
 
@@ -31,7 +31,7 @@ Camera::~Camera() {
 void Camera::run(){
 
 	while(isThreadRunning){
-		Camera::cameraMutex.lock()
+		Camera::cameraMutex.lock();
 		capture.grab();
 		cameraMutex.unlock();
 	}
@@ -77,6 +77,6 @@ void Camera::takePicture(int pictureType, int number){
 	 cameraMutex.unlock();
 }
 void Camera::start(){
-	std::thread cameraThread (run);
+	std::thread cameraThread (Camera::run);
 }
 
