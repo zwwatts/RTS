@@ -16,14 +16,14 @@ int numCaptures;
 
 int button1Pressed(int var);
 int button2Pressed(int var);
-
+Camera camera;
 int main(int argc, char*  argv[]){
 	if(argc < 6 || argc > 6){
 		std::cout << "selfie button1 button2 LED width height" << std::endl;
 		exit(0);
 	}
 	numCaptures = 0;
-	Camera camera(0, (int)argv[3], (int)argv[4], (int)argv[5]);
+	camera(0, (int)argv[3], (int)argv[4], (int)argv[5]);
 	GPIO* button1 = new GPIO((int)argv[1]); //button 1 png
 	button1->setDirection(GPIO::INPUT);
 	button1->setEdgeType(GPIO::FALLING);

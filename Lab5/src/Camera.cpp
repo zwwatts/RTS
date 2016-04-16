@@ -80,6 +80,6 @@ void Camera::takePicture(int pictureType, int number){
 	 cameraMutex.unlock();
 }
 void Camera::start(){
-	std::thread cameraThread (run);
+	std::thread cameraThread(run);
 }
 
