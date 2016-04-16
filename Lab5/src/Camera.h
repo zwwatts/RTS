@@ -24,7 +24,7 @@ public:
 	//Camera(Camera& c);
 	Camera(int port, int pinNumber, int width, int height);
 	virtual ~Camera();
-	void run();
+	void *run();
 	void shutdown();
 	void start();
 	void takePicture(int pictureType, int number);

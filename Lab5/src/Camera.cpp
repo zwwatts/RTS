@@ -31,7 +31,7 @@ Camera::Camera(int port, int pin, int width, int height) {
 Camera::~Camera() {
 	// TODO Auto-generated destructor stub
 }
-void Camera::run(){
+void* Camera::run(){
 
 	while(isThreadRunning){
 		Camera::cameraMutex.lock();
@@ -80,6 +80,8 @@ void Camera::takePicture(int pictureType, int number){
 	 cameraMutex.unlock();
 }
 void Camera::start(){
-	std::thread cameraThread(&Camera::run);
+	pthread_t thread;
+	//std::thread cameraThread = std::thread(Camera::run);
+	pthread_create(&thread, NULL, run, (void *)NULL);
 }
 
