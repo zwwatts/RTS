@@ -2,7 +2,7 @@
  * main.cpp
  *
  *  Created on: Apr 15, 2016
- *      Author: se3910
+ *      Author: sorianog, wattsz
  */
 #include "Camera.h"
 #include "gpio/GPIO.h"
@@ -15,13 +15,16 @@ using namespace exploringBB;
 Camera camera;
 int numCaptures;
 
+int button1Pressed(int var);
+int button2Pressed(int var);
+
 int main(char*  argv[], int argc){
 	if(argc < 6 || argc > 6){
 		std::cout << "selfie button1 button2 LED width height" << std::endl;
 		exit(0);
 	}
 	numCaptures = 0;
-	camera = new Camera(0, argv[3], argv[4], argv[5]);
+	Camera camera(0, (int)argv[3], (int)argv[4], (int)argv[5]);
 	GPIO* button1 = new GPIO(argv[1]); //button 1 png
 	button1->setDirection(GPIO::INPUT);
 	button1->setEdgeType(GPIO::FALLING);
@@ -35,7 +38,7 @@ int main(char*  argv[], int argc){
 	while(running){
 		std::string input;
 		std::cin >> input;
-		if(input == 'quit'){
+		if(input == "quit"){
 			std::cout << "shutting camera down" << std::endl;
 			camera.shutdown();
 		}

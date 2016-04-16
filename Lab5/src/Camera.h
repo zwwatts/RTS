@@ -2,7 +2,7 @@
  * Camera.h
  *
  *  Created on: Apr 15, 2016
- *      Author: se3910
+ *      Author: sorianog, wattsz
  */
 
 #ifndef SRC_CAMERA_H_

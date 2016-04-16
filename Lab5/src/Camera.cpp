@@ -2,7 +2,7 @@
  * Camera.cpp
  *
  *  Created on: Apr 15, 2016
- *      Author: se3910
+ *      Author: sorianog, wattsz
  */
 
 #include "Camera.h"
@@ -45,7 +45,6 @@ void takePicture(int pictureType, int number){
 	Camera::cameraLight->setValue(GPIO::HIGH);
 	struct timespec grabstart, grabend, writeStart, writeEnd;
 	clock_gettime( CLOCK_REALTIME, &grabstart );
-	VideoCapture capture(0);
 
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, Camera::width);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, Camera::height);
