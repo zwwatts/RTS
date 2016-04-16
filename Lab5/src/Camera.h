@@ -16,6 +16,7 @@
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
 
 using namespace cv;
+using namespace std;
 using namespace exploringBB;
 
 class Camera {
@@ -29,7 +30,7 @@ public:
 	void takePicture(int pictureType, int number);
 private:
 	GPIO* cameraLight;
-	mutex cameraMutex;
+	std::mutex cameraMutex;
 	VideoCapture* capture;
 	int height;
 	int width;

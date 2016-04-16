@@ -21,7 +21,7 @@ Camera::Camera(int port, int pin, int width, int height) {
 	// TODO Auto-generated constructor stub
 	Camera::cameraLight = new GPIO(pin);
 	Camera::cameraLight->setDirection(GPIO::OUTPUT);
-	Camera::capture = new VideocCapture(port);
+	Camera::capture(port);
 
 }
 
@@ -31,7 +31,7 @@ Camera::~Camera() {
 void Camera::run(){
 
 	while(isThreadRunning){
-		cameraMutex.lock()
+		Camera::cameraMutex.lock()
 		capture.grab();
 		cameraMutex.unlock();
 	}
@@ -47,16 +47,16 @@ void Camera::takePicture(int pictureType, int number){
 	struct timespec grabstart, grabend, writeStart, writeEnd;
 	clock_gettime( CLOCK_REALTIME, &grabstart );
 
-	capture.set(CV_CAP_PROP_FRAME_WIDTH, width);
-	capture.set(CV_CAP_PROP_FRAME_HEIGHT, height);
+	capture->set(CV_CAP_PROP_FRAME_WIDTH, width);
+	capture->set(CV_CAP_PROP_FRAME_HEIGHT, height);
 
-	if(!capture.isOpened()){
+	if(!capture->isOpened()){
 	     std::cout << "Failed to connect to the camera." << std::endl;
 	     exit(-1);
 	    }
 	 Mat frame, edges;
 
-	 capture.retrieve(frame, 0);
+	 capture->retrieve(frame, 0);
 	 clock_gettime(CLOCK_REALTIME, &grabend);
 	 double difference = (grabend.tv_sec - grabstart.tv_sec) + (double)(grabend.tv_nsec - grabstart.tv_nsec)/1000000000.0d;
 	 std::cout << "It took " << difference << " seconds to capture" << std::endl;
