@@ -10,6 +10,7 @@
 #include <iostream>
 #include <mutex>
 #include <thread>
+#include <string>
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
 
 
@@ -21,10 +22,12 @@ Camera::Camera(int port, int pin, int width, int height) {
 	// TODO Auto-generated constructor stub
 	Camera::cameraLight = new GPIO(pin);
 	Camera::cameraLight->setDirection(GPIO::OUTPUT);
-	Camera::capture = VideoCapture(port);
+	Camera::capture = new VideoCapture(port);
 
 }
+Camera::Camera(Camera& c){
 
+};
 Camera::~Camera() {
 	// TODO Auto-generated destructor stub
 }
@@ -32,7 +35,7 @@ void Camera::run(){
 
 	while(isThreadRunning){
 		Camera::cameraMutex.lock();
-		capture.grab();
+		capture->grab();
 		cameraMutex.unlock();
 	}
 
@@ -63,11 +66,11 @@ void Camera::takePicture(int pictureType, int number){
 	 clock_gettime( CLOCK_REALTIME, &writeStart);
 
 	 if(pictureType){
-		 imwrite("capture"+number+".jpg", frame);
+		 imwrite("capture"+std::to_string(number)+".jpg", frame);
 		 std::cout << "capture" << number << ".jpg" << std::endl;
 	 }
 	 else{
-		 imwrite("capture"+number+".png", frame);
+		 imwrite("capture"+std::to_string(number)+".png", frame);
 		 std::cout << "capture" << number << ".png" << std::endl;
 	 }
 	 clock_gettime( CLOCK_REALTIME, &writeEnd);
