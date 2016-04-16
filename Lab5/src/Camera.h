@@ -16,6 +16,7 @@
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
 
 using namespace cv;
+using namespace exploringBB;
 
 class Camera {
 public:

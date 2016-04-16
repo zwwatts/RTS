@@ -15,18 +15,20 @@
 
 using namespace cv;
 using namespace Camera;
+using namespace exploringBB;
 
-Camera::Camera() {
+Camera::Camera(int port, int pin, int width, int height) {
 	// TODO Auto-generated constructor stub
-	Camera::cameraLight = new GPIO(68);
+	Camera::cameraLight = new GPIO(pin);
 	Camera::cameraLight->setDirection(GPIO::OUTPUT);
+	Camera::capture = new VideocCapture(port);
 }
 
 Camera::~Camera() {
 	// TODO Auto-generated destructor stub
 }
 void run(){
-	VideoCapture capture(0);
+
 	while(Camera::isThreadRunning){
 		Camera::cameraMutex.lock()
 		capture.grab();
@@ -45,11 +47,11 @@ void takePicture(int pictureType, int number){
 	clock_gettime( CLOCK_REALTIME, &grabstart );
 	VideoCapture capture(0);
 
-	capture.set(CV_CAP_PROP_FRAME_WIDTH, width);
-	capture.set(CV_CAP_PROP_FRAME_HEIGHT, height);
+	capture.set(CV_CAP_PROP_FRAME_WIDTH, Camera::width);
+	capture.set(CV_CAP_PROP_FRAME_HEIGHT, Camera::height);
 
 	if(!capture.isOpened()){
-	     cout << "Failed to connect to the camera." << endl;
+	     std::cout << "Failed to connect to the camera." << std::endl;
 	     exit(-1);
 	    }
 	 Mat frame, edges;
@@ -57,21 +59,21 @@ void takePicture(int pictureType, int number){
 	 capture.retrieve(frame, 0);
 	 clock_gettime(CLOCK_REALTIME, &grabend);
 	 double difference = (grabend.tv_sec - grabstart.tv_sec) + (double)(grabend.tv_nsec - grabstart.tv_nsec)/1000000000.0d;
-	 cout << "It took " << difference << " seconds to capture" << endl;
+	 std::cout << "It took " << difference << " seconds to capture" << std::endl;
 	 clock_gettime( CLOCK_REALTIME, &writeStart);
 
 	 if(pictureType){
 		 imwrite("capture"+number+".jpg", frame);
-		 std:cout << "capture" << number << ".jpg" << std::endl;
+		 std::cout << "capture" << number << ".jpg" << std::endl;
 	 }
 	 else{
 		 imwrite("capture"+number+".png", frame);
-		 std:cout << "capture" << number << ".png" << std::endl;
+		 std::cout << "capture" << number << ".png" << std::endl;
 	 }
 	 clock_gettime( CLOCK_REALTIME, &writeEnd);
 
 	 difference = (writeEnd.tv_sec - writeStart.tv_sec) + (double)(writeEnd.tv_nsec - writeStart.tv_nsec)/1000000000.0d;
-	 cout << "It took " << difference << " seconds to capture" << endl;
+	 std::cout << "It took " << difference << " seconds to capture" << std::endl;
 	 Camera::cameraMutex.unlock();
 }
 void start(){
