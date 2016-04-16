@@ -25,11 +25,11 @@ int main(char*  argv[], int argc){
 	}
 	numCaptures = 0;
 	Camera camera(0, (int)argv[3], (int)argv[4], (int)argv[5]);
-	GPIO* button1 = new GPIO(argv[1]); //button 1 png
+	GPIO* button1 = new GPIO((int)argv[1]); //button 1 png
 	button1->setDirection(GPIO::INPUT);
 	button1->setEdgeType(GPIO::FALLING);
 	button1->waitForEdge(button1Pressed);
-	GPIO* button2 = new GPIO(argv[2]); //button 2 jpg
+	GPIO* button2 = new GPIO((int)argv[2]); //button 2 jpg
 	button2->setDirection(GPIO::INPUT);
 	button2->setEdgeType(GPIO::FALLING);
 	button2->waitForEdge(button2Pressed);

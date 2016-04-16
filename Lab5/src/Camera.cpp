@@ -14,7 +14,7 @@
 
 
 using namespace cv;
-using namespace Camera;
+using namespace std;
 using namespace exploringBB;
 
 Camera::Camera(int port, int pin, int width, int height) {
@@ -22,32 +22,33 @@ Camera::Camera(int port, int pin, int width, int height) {
 	Camera::cameraLight = new GPIO(pin);
 	Camera::cameraLight->setDirection(GPIO::OUTPUT);
 	Camera::capture = new VideocCapture(port);
+
 }
 
 Camera::~Camera() {
 	// TODO Auto-generated destructor stub
 }
-void run(){
+void Camera::run(){
 
-	while(Camera::isThreadRunning){
-		Camera::cameraMutex.lock()
+	while(isThreadRunning){
+		cameraMutex.lock()
 		capture.grab();
-		Camera::cameraMutex.unlock();
+		cameraMutex.unlock();
 	}
 
 }
-void shutdown(){
-	Camera::isThreadRunning = false;
+void Camera::shutdown(){
+	isThreadRunning = false;
 	exit(0);
 }
-void takePicture(int pictureType, int number){
-	Camera::cameraMutex.lock();
-	Camera::cameraLight->setValue(GPIO::HIGH);
+void Camera::takePicture(int pictureType, int number){
+	cameraMutex.lock();
+	cameraLight->setValue(GPIO::HIGH);
 	struct timespec grabstart, grabend, writeStart, writeEnd;
 	clock_gettime( CLOCK_REALTIME, &grabstart );
 
-	capture.set(CV_CAP_PROP_FRAME_WIDTH, Camera::width);
-	capture.set(CV_CAP_PROP_FRAME_HEIGHT, Camera::height);
+	capture.set(CV_CAP_PROP_FRAME_WIDTH, width);
+	capture.set(CV_CAP_PROP_FRAME_HEIGHT, height);
 
 	if(!capture.isOpened()){
 	     std::cout << "Failed to connect to the camera." << std::endl;
@@ -73,9 +74,9 @@ void takePicture(int pictureType, int number){
 
 	 difference = (writeEnd.tv_sec - writeStart.tv_sec) + (double)(writeEnd.tv_nsec - writeStart.tv_nsec)/1000000000.0d;
 	 std::cout << "It took " << difference << " seconds to capture" << std::endl;
-	 Camera::cameraMutex.unlock();
+	 cameraMutex.unlock();
 }
-void start(){
+void Camera::start(){
 	std::thread cameraThread (run);
 }
 
