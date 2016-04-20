@@ -17,6 +17,13 @@ Camera* camera = NULL;
 int button1Pressed(int var);
 int button2Pressed(int var);
 
+/**
+ * Process the command line arguments, create a new Camera, and process button clicks
+ *
+ * @param argc ignored
+ * @param argv - command line arguments
+ * @return
+ */
 int main(int argc, char *argv[]){
 	if(argc < 6 || argc > 6){
 		std::cout << "selfie button1 button2 LED width height" << std::endl;
@@ -47,12 +54,26 @@ int main(int argc, char *argv[]){
 	}
 
 }
+
+/**
+ * Take a picture when button 1 is pressed
+ *
+ * @param var
+ * @return
+ */
 int button1Pressed(int var){
 	std::cout << "button1 Pressed" << std::endl;
 	camera->takePicture(0, numCaptures);
 	numCaptures++;
 	return 0;
 }
+
+/**
+ * Take a picture when button 1 is pressed
+ *
+ * @param var
+ * @return
+ */
 int button2Pressed(int var){
 	std::cout << "button2 Pressed" << std::endl;
 	camera->takePicture(1, numCaptures);

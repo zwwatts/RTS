@@ -18,6 +18,14 @@ using namespace cv;
 using namespace std;
 using namespace exploringBB;
 
+/**
+ * Constructor for Camera. Initialize variables for camera
+ *
+ * @param port - USB port for camera
+ * @param pin - GPIO pin for LED
+ * @param width - width for image
+ * @param height - height for image
+ */
 Camera::Camera(int port, int pin, int width, int height) {
 	// TODO Auto-generated constructor stub
 	Camera::cameraLight = new GPIO(pin);
@@ -33,6 +41,10 @@ Camera::Camera(int port, int pin, int width, int height) {
 Camera::~Camera() {
 	// TODO Auto-generated destructor stub
 }
+
+/**
+ * Keep grabbing frames from the camera while the thread is still running
+ */
 void Camera::run(){
 	std::cout << "grabbing from camera..." << std::endl;
 	while(isThreadRunning){
@@ -41,11 +53,22 @@ void Camera::run(){
 		cameraMutex.unlock();
 	}
 }
+
+/**
+ * Set the thread running flag to false and join the cameraThread
+ */
 void Camera::shutdown(){
 	isThreadRunning = false;
 	cameraThread.join();
 	exit(0);
 }
+/**
+ * Take a picture and save it.
+ * Print out the name of the picture and the times it took to retrieve & save it.
+ *
+ * @param pictureType - format of picture (PNG, JPG)
+ * @param number - id for picture
+ */
 void Camera::takePicture(int pictureType, int number){
 	cameraMutex.lock();
 	cameraLight->setValue(GPIO::HIGH);
@@ -79,6 +102,10 @@ void Camera::takePicture(int pictureType, int number){
 	 std::cout << "It took " << difference << " seconds to write" << std::endl;
 	 cameraMutex.unlock();
 }
+
+/**
+ * Create the thread that will execute the run method
+ */
 void Camera::start(){
         //pthread_t thread;
 	cameraThread = std::thread(&Camera::run, this);
