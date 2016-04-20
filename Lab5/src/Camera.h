@@ -8,10 +8,11 @@
 #ifndef SRC_CAMERA_H_
 #define SRC_CAMERA_H_
 #include "Camera.h"
-#include "gpio/GPIO.h"
+#include "GPIO.h"
 #include "pthread.h"
 #include <iostream>
 #include <mutex>
+#include <thread>
 #include <stdlib.h>
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
 
@@ -24,11 +25,12 @@ public:
 	//Camera(Camera& c);
 	Camera(int port, int pinNumber, int width, int height);
 	virtual ~Camera();
-	void *run();
+	void run();
 	void shutdown();
 	void start();
 	void takePicture(int pictureType, int number);
 private:
+	std::thread cameraThread;
 	GPIO* cameraLight;
 	std::mutex cameraMutex;
 	VideoCapture* capture;

@@ -5,7 +5,7 @@
  *      Author: sorianog, wattsz
  */
 #include "Camera.h"
-#include "gpio/GPIO.h"
+#include "GPIO.h"
 #include "pthread.h"
 #include <iostream>
 #include <mutex>
@@ -17,20 +17,23 @@ Camera* camera = NULL;
 int button1Pressed(int var);
 int button2Pressed(int var);
 
-int main(int argc, char*  argv[]){
+int main(int argc, char *argv[]){
 	if(argc < 6 || argc > 6){
 		std::cout << "selfie button1 button2 LED width height" << std::endl;
 		exit(0);
 	}
 	numCaptures = 0;
-	camera = new Camera(0, (int)argv[3], (int)argv[4], (int)argv[5]);
-	GPIO* button1 = new GPIO((int)argv[1]); //button 1 png
+	camera = new Camera(0, std::atoi(argv[3]), std::atoi(argv[4]), std::atoi(argv[5]));
+	int btn1 = std::atoi(argv[1]);
+	std::cout << "button 1 is: " << btn1 << std::endl;
+	GPIO* button1 = new GPIO(btn1); //button 1 png
 	button1->setDirection(GPIO::INPUT);
-	button1->setEdgeType(GPIO::FALLING);
+	button1->setEdgeType(GPIO::RISING);
 	button1->waitForEdge(button1Pressed);
-	GPIO* button2 = new GPIO((int)argv[2]); //button 2 jpg
+	int btn2 = std::atoi(argv[2]);
+	GPIO* button2 = new GPIO(btn2); //button 2 jpg
 	button2->setDirection(GPIO::INPUT);
-	button2->setEdgeType(GPIO::FALLING);
+	button2->setEdgeType(GPIO::RISING);
 	button2->waitForEdge(button2Pressed);
 	camera->start();
 	bool running = true;
@@ -45,11 +48,13 @@ int main(int argc, char*  argv[]){
 
 }
 int button1Pressed(int var){
+	std::cout << "button1 Pressed" << std::endl;
 	camera->takePicture(0, numCaptures);
 	numCaptures++;
 	return 0;
 }
 int button2Pressed(int var){
+	std::cout << "button2 Pressed" << std::endl;
 	camera->takePicture(1, numCaptures);
 	numCaptures++;
 	return 0;

@@ -6,7 +6,7 @@
  */
 
 #include "Camera.h"
-#include "gpio/GPIO.h"
+#include "GPIO.h"
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -23,7 +23,9 @@ Camera::Camera(int port, int pin, int width, int height) {
 	Camera::cameraLight = new GPIO(pin);
 	Camera::cameraLight->setDirection(GPIO::OUTPUT);
 	Camera::capture = new VideoCapture(port);
-
+	capture->set(CV_CAP_PROP_FRAME_HEIGHT, height);
+	capture->set(CV_CAP_PROP_FRAME_WIDTH, width);
+	Camera::isThreadRunning = true;
 }
 /*Camera::Camera(Camera& c){
 
@@ -31,17 +33,17 @@ Camera::Camera(int port, int pin, int width, int height) {
 Camera::~Camera() {
 	// TODO Auto-generated destructor stub
 }
-void* Camera::run(){
-
+void Camera::run(){
+	std::cout << "grabbing from camera..." << std::endl;
 	while(isThreadRunning){
-		Camera::cameraMutex.lock();
+		cameraMutex.lock();
 		capture->grab();
 		cameraMutex.unlock();
 	}
-
 }
 void Camera::shutdown(){
 	isThreadRunning = false;
+	cameraThread.join();
 	exit(0);
 }
 void Camera::takePicture(int pictureType, int number){
@@ -50,8 +52,6 @@ void Camera::takePicture(int pictureType, int number){
 	struct timespec grabstart, grabend, writeStart, writeEnd;
 	clock_gettime( CLOCK_REALTIME, &grabstart );
 
-	capture->set(CV_CAP_PROP_FRAME_WIDTH, width);
-	capture->set(CV_CAP_PROP_FRAME_HEIGHT, height);
 
 	if(!capture->isOpened()){
 	     std::cout << "Failed to connect to the camera." << std::endl;
@@ -64,7 +64,7 @@ void Camera::takePicture(int pictureType, int number){
 	 double difference = (grabend.tv_sec - grabstart.tv_sec) + (double)(grabend.tv_nsec - grabstart.tv_nsec)/1000000000.0d;
 	 std::cout << "It took " << difference << " seconds to capture" << std::endl;
 	 clock_gettime( CLOCK_REALTIME, &writeStart);
-
+	 cameraLight->setValue(GPIO::LOW);
 	 if(pictureType){
 		 imwrite("capture"+std::to_string(number)+".jpg", frame);
 		 std::cout << "capture" << number << ".jpg" << std::endl;
@@ -76,12 +76,12 @@ void Camera::takePicture(int pictureType, int number){
 	 clock_gettime( CLOCK_REALTIME, &writeEnd);
 
 	 difference = (writeEnd.tv_sec - writeStart.tv_sec) + (double)(writeEnd.tv_nsec - writeStart.tv_nsec)/1000000000.0d;
-	 std::cout << "It took " << difference << " seconds to capture" << std::endl;
+	 std::cout << "It took " << difference << " seconds to write" << std::endl;
 	 cameraMutex.unlock();
 }
 void Camera::start(){
-	pthread_t thread;
-	//std::thread cameraThread = std::thread(Camera::run);
-	pthread_create(&thread, NULL, run, (void *)NULL);
+        //pthread_t thread;
+	cameraThread = std::thread(&Camera::run, this);
+	//pthread_create(&thread, NULL, run, (void *)NULL);
 }
 
