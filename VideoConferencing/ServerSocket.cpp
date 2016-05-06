@@ -8,6 +8,8 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <ctype.h>
 
 /*
 * This method will print an error
@@ -28,7 +30,8 @@ void error(char* msg) {
 */
 int main(int argc, char* argv[]) {
 	int sockfd, newsockfd, portno, client, n, index;
-	struct sockaddr_in, serv_addr, cli_addr;
+	struct sockaddr_in serv_addr;
+	struct sockaddr_in cli_addr;
 	char buffer[256];
 	
 	//If there are not the right number of params abort
@@ -65,11 +68,11 @@ int main(int argc, char* argv[]) {
 	//The param is the number of connections that can be waiting/queued
 	//Most systems allow a maximum of 5
 	listen(sockfd, 5);
-	client = sizeof(clie_addr);
+	client = sizeof(cli_addr);
 	
 	//Block until a client has connected to the server
 	//This returns a fd for the connection
-	newsockfd = accept(sockfd, (struct sockaddr*) &cli_addr, &client);
+	newsockfd = accept(sockfd, (struct sockaddr*) &cli_addr, (socklen_t*)&client);
 	
 	//If the rc is less than 1, there is an error
 	if(newsockfd < 0) {
