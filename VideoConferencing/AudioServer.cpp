@@ -16,7 +16,7 @@
 #include "AudioInterface.h"
 
 AudioServer::AudioServer() {
-	//port = ???;
+	port = 1337;
 }
 
 AudioServer::~AudioServer() {
