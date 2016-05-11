@@ -1,4 +1,7 @@
 /*
+* Created on: May 6, 2016
+* Author: spaethk
+*
 * A simple server in the internet domain using TCP
 * Usage -> PROGRAM_NAME PORT_NUMBER
 */
