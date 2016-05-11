@@ -25,10 +25,11 @@ public:
 
 private:
 	int port;
+	int FRAME_SIZE = 512;
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 	int sockfd;
-	int buffer[256];
+	int buffer[FRAME_SIZE];
 	char* hostName;
 };
 
