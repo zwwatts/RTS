@@ -15,6 +15,11 @@
 #include "AudioServer.h"
 #include "AudioInterface.h"
 
+
+#define SAMPLING_RATE (22500)
+#define NUMBER_OF_CHANNELS (2)
+#define BYTES_PER_SAMPLE (2)
+
 AudioServer::AudioServer() {
 	port = 1337;
 }
@@ -57,7 +62,7 @@ void AudioServer::startListening(int port) {
 	
 	//Fill the buffer with all zeros
 	memset(&bufferAudio[0], 0, sizeof(bufferAudio));
-	AudioInterface ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
+	AudioInterface* ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
 	int bufferSize = ai->getRequiredBufferSize();
 	bufferAudio = (char*)malloc(bufferSize);
 
