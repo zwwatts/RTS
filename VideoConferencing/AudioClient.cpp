@@ -13,7 +13,11 @@
 #include <netdb.h>
 #include <unistd.h>
 #include "AudioClient.h"
+#include "AudioInterface.h"
 
+#define SAMPLING_RATE (22500)
+#define NUMBER_OF_CHANNELS (2)
+#define BYTES_PER_SAMPLE (2)
 
 AudioClient::AudioClient() {
 	// TODO Auto-generated constructor stub
@@ -54,6 +58,33 @@ void AudioClient::startSending(int numSeconds){
 	buffer[0] = 'a';
 	int n = write(sockfd,buffer,strlen((const char*)&buffer[0]));
 
+	AudioInterface *ai;
+	char *bufferAudio;
+	int bufferSize;
 
+	//TODO: un-hardcode the audio port/device name
+	ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
+	bufferSize = ai->getRequiredBufferSize();
+	bufferAudio = (char*)malloc(bufferSize);
+
+	// Determine how many bytes need to be captured.
+	int bytesToCapture = SAMPLING_RATE * numSeconds * NUMBER_OF_CHANNELS * BYTES_PER_SAMPLE;
+
+	do {
+		// Fill the buffer with all zeros.
+		memset(bufferAudio, 0, bufferSize);
+
+		// Capture from the soundcard
+		ai->read(bufferAudio);
+
+		// Write to the socket buffer.
+		write(sockfd, bufferAudio, bufferSize);
+
+		bytesToCapture-=bufferSize;
+
+	} while ((bytesToCapture > 0));
+	close(filedesc);
+
+	ai->close();
 }
 
