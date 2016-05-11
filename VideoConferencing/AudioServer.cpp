@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include "AudioServer.h"
+#include "AudioInterface.h"
 
 AudioServer::AudioServer() {
 	//port = ???;
@@ -55,17 +56,20 @@ void AudioServer::startListening(int port) {
 	}
 	
 	//Fill the buffer with all zeros
-	memset(&buffer[0], 0, sizeof(buffer));
-	
+	memset(&bufferAudio[0], 0, sizeof(bufferAudio));
+	AudioInterface ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
+	int bufferSize = ai->getRequiredBufferSize();
+	bufferAudio = (char*)malloc(bufferSize);
+
 	//Read from the buffer when data arrives
 	//The max that can be read is 255
-	n = read(newsockfd, buffer, sizeof(buffer) - 1);
+	n = read(newsockfd, bufferAudio, sizeof(bufferAudio) - 1);
 	if(n < 0) {
 		error("Error reading from the socket!\n");
 	}
 	
 	//Print the message
-	printf("Here is the message: %s\n", buffer);
+	printf("Here is the message: %s\n", bufferAudio);
 }
 
 void error(char* msg) {

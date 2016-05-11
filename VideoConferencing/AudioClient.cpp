@@ -53,7 +53,7 @@ void AudioClient::startSending(int numSeconds){
 		printf("ERROR connecting\n");
 		exit(-1);
 	}
-	memset((void*)&buffer[0], 0, sizeof(buffer));
+
 
 	buffer[0] = 'a';
 	int n = write(sockfd,buffer,strlen((const char*)&buffer[0]));
@@ -83,7 +83,7 @@ void AudioClient::startSending(int numSeconds){
 		bytesToCapture-=bufferSize;
 
 	} while ((bytesToCapture > 0));
-	close(filedesc);
+
 
 	ai->close();
 }

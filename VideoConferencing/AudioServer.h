@@ -26,7 +26,7 @@ class AudioServer {
     	int sockfd, newsockfd, portno, client, n, index;
         struct sockaddr_in serv_addr;
         struct sockaddr_in cli_addr;
-        char buffer[256];
+        char *bufferAudio;
 };
 
 #endif /* SRC_AUDIOSERVER_H_

@@ -15,15 +15,23 @@
 #include <netdb.h>
 #include <unistd.h>
 #include "AudioClient.h"
+#include <thread>
 
 //AudioClient audio();
 int main(int argc, char* argv[]){
 
-	AudioClient audio;
-	audio.startSending(0);
+	AudioClient client;
+	std::thread clientThread (startClient, client);
 
+	AudioServer server;
+	std::thread serverThread (startServer, server);
 	return 0;
 }
+void startClient(AudioClient client){
+	client.startSending(0);
+}
+void startServer(/*AudioServer*/void* server){
 
+}
 
 
