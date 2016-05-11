@@ -2,7 +2,7 @@
  * AudioClient.cpp
  *
  *  Created on: May 6, 2016
- *      Author: se3910
+ *      Author: sorianog, wattsz
  */
 #include <stdio.h>
 #include <sys/types.h>
