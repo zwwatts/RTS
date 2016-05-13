@@ -1,6 +1,6 @@
 /*
  * MainClient.cpp
-
+ *
  *
  *  Created on: May 6, 2016
  *      Author: se3910
@@ -20,7 +20,6 @@
 using namespace std;
 
 void startClient(AudioClient client, int numSeconds);
-//AudioClient audio();
 int main(int argc, char* argv[]){
 	char* host = argv[1];
 	int numSeconds = atoi(argv[2]);
