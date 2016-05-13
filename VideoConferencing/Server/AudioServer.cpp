@@ -40,7 +40,7 @@ void AudioServer::startListening(int port) {
 	//Setup the server address structure
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
-	serv_addr.sin_port = htons(portno);
+	serv_addr.sin_port = htons(port);
 	
 	//Bind the socket appropriately
 	if(bind(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0) {
@@ -62,8 +62,8 @@ void AudioServer::startListening(int port) {
 	
 	//Fill the buffer with all zeros
 	memset(&bufferAudio[0], 0, sizeof(bufferAudio));
-	AudioInterface* ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
-	int bufferSize = ai->getRequiredBufferSize();
+	/*AudioInterface* ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);*/
+	int bufferSize = 256;//ai->getRequiredBufferSize();
 	bufferAudio = (char*)malloc(bufferSize);
 
 	//Read from the buffer when data arrives
@@ -77,7 +77,7 @@ void AudioServer::startListening(int port) {
 	printf("Here is the message: %s\n", bufferAudio);
 }
 
-void error(char* msg) {
+void AudioServer::error(char* msg) {
 	//Print the error using perror (See page 328)
 	perror(msg);
 	exit(-1);

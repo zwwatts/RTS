@@ -1,8 +1,7 @@
 /*
- * MainClient.cpp
-
+ * MainServer.cpp
  *
- *  Created on: May 6, 2016
+ *  Created on: May 13, 2016
  *      Author: se3910
  */
 
@@ -14,23 +13,24 @@
 #include <string.h>
 #include <netdb.h>
 #include <unistd.h>
-#include "AudioClient.h"
+#include "AudioServer.h"
 #include <thread>
 #include <iostream>
 using namespace std;
 
-void startClient(AudioClient client);
+void startServer(AudioServer server);
 //AudioClient audio();
 int main(int argc, char* argv[]){
 
-	AudioClient client;
-	std::thread clientThread(startClient, client);
-	clientThread.join();
+	AudioServer server;
+	std::thread serverThread(startServer, server);
+	serverThread.join();
 	return 0;
 }
-void startClient(AudioClient client){
-	client.startSending(0);
+void startServer(AudioServer server){
+	server.startListening(1337);
 }
+
 
 
 
