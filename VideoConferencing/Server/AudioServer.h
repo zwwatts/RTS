@@ -23,7 +23,7 @@ class AudioServer {
         void startListening(int port);
     
     private:
-    	int sockfd, newsockfd, portno, client, n, index;
+    	int sockfd, newsockfd, client, n, index;
         struct sockaddr_in serv_addr;
         struct sockaddr_in cli_addr;
         char *bufferAudio;
