@@ -19,17 +19,18 @@
 #include <iostream>
 using namespace std;
 
-void startClient(AudioClient client);
+void startClient(AudioClient client, int numSeconds);
 //AudioClient audio();
 int main(int argc, char* argv[]){
-
-	AudioClient client;
-	std::thread clientThread(startClient, client);
+	char* host = argv[1];
+	int numSeconds = atoi(argv[2]);
+	AudioClient client(host);
+	std::thread clientThread(startClient, client, numSeconds);
 	clientThread.join();
 	return 0;
 }
-void startClient(AudioClient client){
-	client.startSending(0);
+void startClient(AudioClient client, int numSeconds){
+	client.startSending(numSeconds);
 }
 
 

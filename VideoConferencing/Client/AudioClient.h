@@ -19,7 +19,7 @@
 
 class AudioClient {
 public:
-	AudioClient();
+	AudioClient(char* host);
 	virtual ~AudioClient();
 	void startSending(int numSeconds);
 

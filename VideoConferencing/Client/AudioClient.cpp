@@ -19,10 +19,10 @@
 #define NUMBER_OF_CHANNELS (2)
 #define BYTES_PER_SAMPLE (2)
 
-AudioClient::AudioClient() {
+AudioClient::AudioClient(char* host) {
 	// TODO Auto-generated constructor stub
 	port = 1337;
-	hostName = "127.0.0.1";
+	hostName = host;
 }
 
 AudioClient::~AudioClient() {
@@ -63,7 +63,7 @@ void AudioClient::startSending(int numSeconds){
 	int bufferSize;
 
 	//TODO: un-hardcode the audio port/device name
-	ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
+	ai = new AudioInterface("plughw:0", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
 	bufferSize = ai->getRequiredBufferSize();
 	bufferAudio = (char*)malloc(bufferSize);
 
