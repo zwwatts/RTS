@@ -21,14 +21,14 @@
 #define BYTES_PER_SAMPLE (2)
 
 AudioServer::AudioServer() {
-	port = 1337;
+	port = 10000;
 }
 
 AudioServer::~AudioServer() {
 	
 }
 
-void AudioServer::startListening(int port) {	
+void AudioServer::startListening(int port) {
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if(sockfd < 0) {
 		error("Error opening socket!\n");
@@ -55,26 +55,42 @@ void AudioServer::startListening(int port) {
 	
 	//Block until a client has connected to the server
 	//This returns a fd for the connection
+	printf("waiting for connection\n");
 	newsockfd = accept(sockfd, (struct sockaddr*) &cli_addr, (socklen_t*)&client);
 	if(newsockfd < 0) {
 		error("Error on accept!\n");
 	}
-	
-	//Fill the buffer with all zeros
-	memset(&bufferAudio[0], 0, sizeof(bufferAudio));
-	/*AudioInterface* ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);*/
-	int bufferSize = 256;//ai->getRequiredBufferSize();
-	bufferAudio = (char*)malloc(bufferSize);
+	printf("connection accepted\n");
 
-	//Read from the buffer when data arrives
-	//The max that can be read is 255
-	n = read(newsockfd, bufferAudio, sizeof(bufferAudio) - 1);
+	AudioInterface* ai;
+	ai = new AudioInterface("plughw:0", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_PLAYBACK);
+	ai->open();
+	printf("Interface accessed\n");
+	int bufferSize = ai->getRequiredBufferSize() * 8;
+	printf("preparing to malloc\n");
+
+	bufferAudio = (char*)malloc(bufferSize);
+	//Fill the buffer with all zeros
+	printf("buffered initialized\n");
+	memset(bufferAudio, 0, sizeof(bufferAudio));
+	ai->write(bufferAudio, bufferSize);
+	printf("filled with 0\n");
+	n = read(newsockfd, bufferAudio, bufferSize);
 	if(n < 0) {
-		error("Error reading from the socket!\n");
-	}
-	
-	//Print the message
-	printf("Here is the message: %s\n", bufferAudio);
+					error("Error reading from the socket!\n");
+				}
+	do{
+		memset(bufferAudio, 0, bufferSize);
+		n = read(newsockfd, bufferAudio, bufferSize);
+		if(n < 0) {
+						error("Error reading from the socket!\n");
+					}
+		ai->write(bufferAudio, bufferSize);
+		//bytesToCapture -= bufferSize;
+		printf("Wrote %d bytes\n", n);
+	}while(n > 0);
+
+
 }
 
 void AudioServer::error(char* msg) {
