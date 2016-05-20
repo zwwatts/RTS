@@ -21,7 +21,8 @@ VideoClient::VideoClient(char* host, int cameraPort){
 	capture->set(CV_CAP_PROP_FRAME_HEIGHT, 480);
 	capture->set(CV_CAP_PROP_FRAME_WIDTH, 640);
 }
-
+VideoClient::~VideoClient(){
+}
 void VideoClient::startCapturing(int numSeconds){
 
 
