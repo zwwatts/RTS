@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 	AudioClient client(host);
 	std::thread clientThread(startClient, client, numSeconds);
 
-	VideoClient video(host);
+	VideoClient video(host, 0);
 	std::thread videoThread(startVideo, video, numSeconds);
 	clientThread.join();
 	return 0;
@@ -37,7 +37,7 @@ void startClient(AudioClient client, int numSeconds){
 	client.startSending(numSeconds);
 }
 void startVideo(VideoClient video, int numSeconds){
-	video.startCapturing(numSeconds, 0);
+	video.startCapturing(numSeconds);
 }
 
 
