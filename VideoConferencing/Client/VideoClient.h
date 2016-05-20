@@ -8,6 +8,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
 
+using namespace cv;
 
 class VideoClient {
 public:
