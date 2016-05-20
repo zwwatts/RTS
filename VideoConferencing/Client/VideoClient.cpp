@@ -56,15 +56,14 @@ void VideoClient::startCapturing(int numSeconds){
 		     exit(-1);
 		    }
 		 Mat frame, edges;
+		 bool running = true;
+		 while(running){
+			 capture->retrieve(frame, 0);
+			 frame = (frame.reshape(0,1)); // to make it continuous
+			 int  imgSize = frame.total()*frame.elemSize();
 
-		 capture->retrieve(frame, 0);
-		 frame = (frame.reshape(0,1)); // to make it continuous
-		 int  imgSize = frame.total()*frame.elemSize();
-
-		 // Send data here
-		 bytes = send(clientSock, frame.data, imgSize, 0))
-
-
-
+			 // Send data here
+			 bytes = send(clientSock, frame.data, imgSize, 0);
+		 }
 
 }
