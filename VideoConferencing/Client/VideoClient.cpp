@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <ctype.h>
-#include "AudioServer.h"
-#include "AudioInterface.h"
 #include <thread>
 #include <string>
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
