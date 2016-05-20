@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <thread>
 #include <string>
+#include "VideoClient.h"
 #include <opencv2/opencv.hpp> // C++ OpenCV include file
 
 
