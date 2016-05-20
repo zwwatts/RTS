@@ -20,7 +20,7 @@ class AudioServer {
         AudioServer();
         virtual ~AudioServer();
         void error(char* msg);
-        void startListening(int port);
+        void startListening(int port, int numSeconds);
     
     private:
     	int sockfd, newsockfd, client, n, index;

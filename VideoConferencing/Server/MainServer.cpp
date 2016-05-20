@@ -18,17 +18,18 @@
 #include <iostream>
 using namespace std;
 
-void startServer(AudioServer server);
+void startServer(AudioServer server, int numSeconds);
 //AudioClient audio();
 int main(int argc, char* argv[]){
 
 	AudioServer server;
-	std::thread serverThread(startServer, server);
+	int numSeconds = atoi(argv[1]);
+	std::thread serverThread(startServer, server, numSeconds);
 	serverThread.join();
 	return 0;
 }
-void startServer(AudioServer server){
-	server.startListening(1337);
+void startServer(AudioServer server, int numSeconds){
+	server.startListening(10000, numSeconds);
 }
 
 
