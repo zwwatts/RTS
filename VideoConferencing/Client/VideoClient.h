@@ -11,7 +11,7 @@
 
 class VideoClient {
 public:
-	VideoClient(char* host);
+	VideoClient(char* host, int cameraPort);
 	virtual ~VideoClient();
 	void startCapturing(int numSeconds);
 

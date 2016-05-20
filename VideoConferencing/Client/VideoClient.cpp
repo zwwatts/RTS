@@ -62,7 +62,7 @@ void VideoClient::startCapturing(int numSeconds){
 			 int  imgSize = frame.total()*frame.elemSize();
 
 			 // Send data here
-			 bytes = send(clientSock, frame.data, imgSize, 0);
+			 send(sockfd, frame.data, imgSize, 0);
 		 }
 
 }
