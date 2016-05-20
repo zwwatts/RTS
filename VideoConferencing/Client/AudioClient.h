@@ -22,6 +22,7 @@ public:
 	AudioClient(char* host);
 	virtual ~AudioClient();
 	void startSending(int numSeconds);
+	int calcAmp(char *sample);
 
 private:
 	int port;

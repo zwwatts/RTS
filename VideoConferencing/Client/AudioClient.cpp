@@ -14,14 +14,15 @@
 #include <unistd.h>
 #include "AudioClient.h"
 #include "AudioInterface.h"
+#include <math.h>
 
-#define SAMPLING_RATE (22500)
+#define SAMPLING_RATE (22050)
 #define NUMBER_OF_CHANNELS (2)
 #define BYTES_PER_SAMPLE (2)
 
 AudioClient::AudioClient(char* host) {
 	// TODO Auto-generated constructor stub
-	port = 1337;
+	port = 10000;
 	hostName = host;
 }
 
@@ -35,6 +36,7 @@ void AudioClient::startSending(int numSeconds){
 		printf("ERROR opening socket\n");
 		exit(-1);
 	}
+	printf("%s\n",hostName);
 	server = gethostbyname(hostName);
 
 	if (server == NULL) {
@@ -47,6 +49,7 @@ void AudioClient::startSending(int numSeconds){
 	// Copy the data.
 	memcpy((void*)&serv_addr.sin_addr.s_addr,(void*)server->h_addr, server->h_length);
 	serv_addr.sin_port = htons(port);
+	printf("%d\n", port);
 	// connect to the socket.
 	if (connect(sockfd,(struct sockaddr*)&serv_addr,sizeof(serv_addr)) < 0)
 	{
@@ -54,16 +57,13 @@ void AudioClient::startSending(int numSeconds){
 		exit(-1);
 	}
 
-
-	buffer[0] = 'a';
-	int n = write(sockfd,buffer,strlen((const char*)&buffer[0]));
-
 	AudioInterface *ai;
 	char *bufferAudio;
 	int bufferSize;
 
 	//TODO: un-hardcode the audio port/device name
 	ai = new AudioInterface("plughw:0", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
+	ai->open();
 	bufferSize = ai->getRequiredBufferSize();
 	bufferAudio = (char*)malloc(bufferSize);
 
@@ -76,7 +76,7 @@ void AudioClient::startSending(int numSeconds){
 
 		// Capture from the soundcard
 		ai->read(bufferAudio);
-
+    		//printf("Avg amplitude/sec: %d\n", calcAmp(bufferAudio));
 		// Write to the socket buffer.
 		write(sockfd, bufferAudio, bufferSize);
 
@@ -88,3 +88,7 @@ void AudioClient::startSending(int numSeconds){
 	ai->close();
 }
 
+int AudioClient::calcAmp(char *sample){
+	int scale = *sample / 32768;
+	return 20 * log10(scale);
+}
