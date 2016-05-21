@@ -1,5 +1,6 @@
 /*
  * AudioClient.cpp
+ * Audio device should be on plughw:1
  *
  *  Created on: May 6, 2016
  *      Author: sorianog, wattsz
@@ -20,15 +21,21 @@
 #define NUMBER_OF_CHANNELS (2)
 #define BYTES_PER_SAMPLE (2)
 
+/*
+ * ctor - Initialize host & port for socket connection 
+ */
 AudioClient::AudioClient(char* host) {
-	// TODO Auto-generated constructor stub
 	port = 10000;
 	hostName = host;
 }
 
 AudioClient::~AudioClient() {
-	// TODO Auto-generated destructor stub
+       
 }
+
+/*
+ * Capture audio data from sound device and send it to the server 
+ */
 void AudioClient::startSending(int numSeconds){
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0)
@@ -61,8 +68,7 @@ void AudioClient::startSending(int numSeconds){
 	char *bufferAudio;
 	int bufferSize;
 
-	//TODO: un-hardcode the audio port/device name
-	ai = new AudioInterface("plughw:0", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
+	ai = new AudioInterface("plughw:1", SAMPLING_RATE, NUMBER_OF_CHANNELS, SND_PCM_STREAM_CAPTURE);
 	ai->open();
 	bufferSize = ai->getRequiredBufferSize();
 	bufferAudio = (char*)malloc(bufferSize);
@@ -76,7 +82,9 @@ void AudioClient::startSending(int numSeconds){
 
 		// Capture from the soundcard
 		ai->read(bufferAudio);
-    		//printf("Avg amplitude/sec: %d\n", calcAmp(bufferAudio));
+		if (atoi(bufferAudio) > 0) {
+    			//printf("Avg amplitude/sec: %d\n", calcAmp(bufferAudio));
+		}
 		// Write to the socket buffer.
 		write(sockfd, bufferAudio, bufferSize);
 
@@ -88,7 +96,10 @@ void AudioClient::startSending(int numSeconds){
 	ai->close();
 }
 
+/*
+ * Calculate the average amplitude per second for a sample of audio data
+ */
 int AudioClient::calcAmp(char *sample){
-	int scale = *sample / 32768;
-	return 20 * log10(scale);
+	long scale = atoi(sample) / 32768;
+	return long(20 * log10(scale));
 }

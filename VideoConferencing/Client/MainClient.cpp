@@ -1,9 +1,9 @@
 /*
  * MainClient.cpp
- *
+ * args: <avconfclient> <server-address> <seconds to send data> 
  *
  *  Created on: May 6, 2016
- *      Author: se3910
+ *      Author: wattsz
  */
 
 #include <stdio.h>
@@ -22,6 +22,7 @@ using namespace std;
 
 void startClient(AudioClient client, int numSeconds);
 void startVideo(VideoClient video, int numSeconds);
+
 int main(int argc, char* argv[]){
 	char* host = argv[1];
 	int numSeconds = atoi(argv[2]);
@@ -30,12 +31,23 @@ int main(int argc, char* argv[]){
 
 	VideoClient video(host, 0);
 	std::thread videoThread(startVideo, video, numSeconds);
+	
 	clientThread.join();
+	videoThread.join();
+	
 	return 0;
 }
+
+/* 
+ * Start sending audio to the server 
+ */
 void startClient(AudioClient client, int numSeconds){
 	client.startSending(numSeconds);
 }
+
+/*
+ * Start sending video to the server 
+ */ 
 void startVideo(VideoClient video, int numSeconds){
 	video.startCapturing(numSeconds);
 }
