@@ -15,9 +15,21 @@ TEMPLATE = app
 SOURCES +=\
         mainwindow.cpp \
     main.cpp \
-    videoview.cpp
+    audioserver.cpp \
+    videoserver.cpp \
+    AudioInterface.cpp \
+    videoupdater.cpp
 
 HEADERS  += mainwindow.h \
-    videoview.h
+    audioserver.h \
+    videoserver.h \
+    AudioInterface.h \
+    videoupdater.h
 
 FORMS    +=
+
+QMAKE_CXXFLAGS = -std=c++11
+LIBS += -pthread -lasound
+
+unix: CONFIG += link_pkgconfig
+unix: PKGCONFIG += opencv
