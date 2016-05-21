@@ -1,3 +1,11 @@
+/*
+ * VideoClient.h
+ *
+ *
+ *  Created on: May 20, 2016
+ *      Author: wattsz
+ */
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
