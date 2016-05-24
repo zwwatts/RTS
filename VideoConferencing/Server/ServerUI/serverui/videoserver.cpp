@@ -29,6 +29,10 @@ VideoServer::~VideoServer() {
 
 }
 
+/**
+ * Starts listening and then gets the video from the client and sends it to the videoupdater
+ * @param port port to listen on
+ */
 void VideoServer::startListening(int port) {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sockfd < 0) {
@@ -94,12 +98,21 @@ void VideoServer::startListening(int port) {
     printf("Here is the message: %s\n", bufferVideo);
 }
 
+/**
+ * Handles errors
+ * @param msg message of the error
+ */
 void VideoServer::error(char* msg) {
     //Print the error using perror (See page 328)
     perror(msg);
     exit(-1);
 }
 
+/**
+ * Gotten online, converts an OpenCV Mat to a QImage
+ * @param src The mat to convert
+ * @return The QImage
+ */
 QImage VideoServer::Mat2QImage(const cv::Mat3b &src) {
         QImage dest(src.cols, src.rows, QImage::Format_ARGB32);
         for (int y = 0; y < src.rows; ++y) {

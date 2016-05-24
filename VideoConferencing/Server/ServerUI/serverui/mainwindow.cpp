@@ -46,11 +46,18 @@ MainWindow::~MainWindow()
 {
 }
 
+/**
+ * Slot that updates the label with the new frame
+ * @param img The new frame
+ */
 void MainWindow::updateFrame(QImage img){
     label->setPixmap(QPixmap::fromImage(img));
 
 }
 
+/**
+ * @Slot that alerts that the video is connected
+ */
 void MainWindow::vidUp(){
     vidStat->setText("Video Connected");
 }

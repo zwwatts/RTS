@@ -28,6 +28,10 @@ AudioServer::~AudioServer() {
 
 }
 
+/**
+ * Starts listening and then gets the audio from the client
+ * @param port port to listen on
+ */
 void AudioServer::startListening(int port) {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sockfd < 0) {
@@ -93,6 +97,10 @@ void AudioServer::startListening(int port) {
 
 }
 
+/**
+ * Handles errors
+ * @param msg message of the error
+ */
 void AudioServer::error(char* msg) {
     //Print the error using perror (See page 328)
     perror(msg);

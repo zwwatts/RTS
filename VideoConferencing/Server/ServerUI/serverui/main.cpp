@@ -3,8 +3,16 @@
 #include "audioserver.h"
 #include "videoserver.h"
 
-
+/**
+ * Starts the audio listener
+ * @param server The listener to start
+ */
 void startAudioServer(AudioServer server);
+
+/**
+ * Starts the video listener
+ * @param server The listener to start
+ */
 void startVideoServer(VideoServer server);
 
 int main(int argc, char *argv[])
